@@ -1,84 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '.src/App.css';
-import MovieList from './components/MovieList';
-import MovieListHeading from './components/MovieListHeading';
-import SearchBox from './components/SearchBox';
-import AddFavourites from './components/AddFavourites';
-import RemoveFavourites from './components/RemoveFavourites';
+// Import necessary modules and components
+import React, { useReducer, useEffect } from "react";
+import "../App.css";
+import Header from "./Header";
+import Movie from "./Movie";
+import spinner from "../assets/ajax-loader.gif";
+import Search from "./Search";
+import { initialState, reducer } from "../store/reducer";
+import axios from "axios";
 
+// Get the search value from local storage or default to "man"
+const searcValueFromLocalStorage = localStorage.getItem("searchValue") || "man";
+
+// Define the API URL
+const MOVIE_API_URL = `https://www.omdbapi.com/?s=${searcValueFromLocalStorage}&apikey=4a3b711b`;
+
+// Define the App component
 const App = () => {
-	const [movies, setMovies] = useState([]);
-	const [favourites, setFavourites] = useState([]);
-	const [searchValue, setSearchValue] = useState('');
+  // Use the useReducer hook to manage state
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-	const getMovieRequest = async (searchValue) => {
-		const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=263d22d8`;
+  // Use the useEffect hook to fetch data when the component mounts
+  useEffect(() => {
+    axios.get(MOVIE_API_URL).then(jsonResponse => {
+      dispatch({
+        type: "SEARCH_MOVIES_SUCCESS",
+        payload: jsonResponse.data.Search
+      });
+    });
+  }, []);
 
-		const response = await fetch(url);
-		const responseJson = await response.json();
+  // Define the search function
+  const search = searchValue => {
+    dispatch({
+      type: "SEARCH_MOVIES_REQUEST"
+    });
 
-		if (responseJson.Search) {
-			setMovies(responseJson.Search);
-		}
-	};
+    // Make a request to the API with the search value
+    axios(`https://www.omdbapi.com/?s=${searchValue}&apikey=4a3b711b`).then(
+      jsonResponse => {
+        console.log("jsonResponse", jsonResponse);
+        if (jsonResponse.data.Response === "True") {
+          dispatch({
+            type: "SEARCH_MOVIES_SUCCESS",
+            payload: jsonResponse.data.Search
+          });
+        } else {
+          dispatch({
+            type: "SEARCH_MOVIES_FAILURE",
+            error: jsonResponse.data.Error
+          });
+        }
+      }
+    );
+  };
 
-	useEffect(() => {
-		getMovieRequest(searchValue);
-	}, [searchValue]);
+  // Destructure the state
+  const { movies, errorMessage, loading } = state;
 
-	useEffect(() => {
-		const movieFavourites = JSON.parse(
-			localStorage.getItem('react-movie-app-favourites')
-		);
+  console.log("movies", movies);
 
-		setFavourites(movieFavourites);
-	}, []);
+  let retrievedMovies;
 
-	const saveToLocalStorage = (items) => {
-		localStorage.setItem('react-movie-app-favourites', JSON.stringify(items));
-	};
+  // Determine what to display based on the state
+  if (loading && !errorMessage) {
+    retrievedMovies = <img className="spinner" src={spinner} alt="Loading spinner" />;
+  } else if (errorMessage) {
+    retrievedMovies = <div className="errorMessage">{errorMessage}</div>;
+  } else {
+    retrievedMovies = movies?.map((movie) => (
+      <Movie key={movie.imdbID} movie={movie} />
+    ))
+  }
 
-	const addFavouriteMovie = (movie) => {
-		const newFavouriteList = [...favourites, movie];
-		setFavourites(newFavouriteList);
-		saveToLocalStorage(newFavouriteList);
-	};
+  // Render the component
+  return (
+    <div className="App">
+      <div className="m-container">
+        <Header text="HOOKED" />
 
-	const removeFavouriteMovie = (movie) => {
-		const newFavouriteList = favourites.filter(
-			(favourite) => favourite.imdbID !== movie.imdbID
-		);
+        <Search search={search} />
 
-		setFavourites(newFavouriteList);
-		saveToLocalStorage(newFavouriteList);
-	};
+        <p className="App-intro">Sharing a few of our favourite movies</p>
 
-	return (
-		<div className='container-fluid movie-app'>
-			<div className='row d-flex align-items-center mt-4 mb-4'>
-				<MovieListHeading heading='Movies' />
-				<SearchBox searchValue={searchValue} setSearchValue={setSearchValue} />
-			</div>
-			<div className='row'>
-				<MovieList
-					movies={movies}
-					handleFavouritesClick={addFavouriteMovie}
-					favouriteComponent={AddFavourites}
-				/>
-			</div>
-			<div className='row d-flex align-items-center mt-4 mb-4'>
-				<MovieListHeading heading='Favourites' />
-			</div>
-			<div className='row'>
-				<MovieList
-					movies={favourites}
-					handleFavouritesClick={removeFavouriteMovie}
-					favouriteComponent={RemoveFavourites}
-				/>
-			</div>
-		</div>
-	);
+        <div className="movies">{retrievedMovies}</div>
+      </div>
+    </div>
+  );
 };
 
+// Export the App component
 export default App;
