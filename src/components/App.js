@@ -76,11 +76,11 @@ const App = () => {
   return (
     <div className="App">
       <div className="m-container">
-        <Header text="HOOKED" />
+        <Header text="Tobi's Movie Selection" />
 
         <Search search={search} />
 
-        <p className="App-intro">Sharing a few of our favourite movies</p>
+        <p className="App-intro">Below are a few movies our of my selection</p>
 
         <div className="movies">{retrievedMovies}</div>
       </div>
