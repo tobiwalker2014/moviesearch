@@ -29,6 +29,7 @@ Before getting started, make sure you have the following prerequisites:
 4. **'Start the Development Server:'** Launch the development server to see the app in action:
  
 1. **'Create React App:'** Start by creating a new React app using create-react-app:
+   
    ```bash
    npx create-react-app hooked
 
@@ -40,11 +41,13 @@ Before getting started, make sure you have the following prerequisites:
 2. **'Project Structure:'** After creating the app, you'll have a folder named "hooked" containing the initial project structure.
 
 3. **'Install Dependencies:'** Navigate to the project directory and install the necessary dependencies:
+
     ```bash
     cd hooked
     npm install
 
 4. **'Start the Development Server:'** Launch the development server to see the app in action:
+
     ```bash
     npm start
 
