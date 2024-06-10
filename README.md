@@ -28,6 +28,28 @@ Before getting started, make sure you have the following prerequisites:
 3. **'Install Dependencies:'** Navigate to the project directory and install the necessary dependencies:
 4. **'Start the Development Server:'** Launch the development server to see the app in action:
  
+1. **'Create React App:'** Start by creating a new React app using create-react-app:
+   ```bash
+   npx create-react-app hooked
+
+  If create-react-app is not installed, you can install it globally:
+  
+  ```bash
+  npm install -g create-react-app
+
+2. **'Project Structure:'** After creating the app, you'll have a folder named "hooked" containing the initial project structure.
+
+3. **'Install Dependencies:'** Navigate to the project directory and install the necessary dependencies:
+    ```bash
+    cd hooked
+    npm install
+
+4. **'Start the Development Server:'** Launch the development server to see the app in action:
+    ```bash
+    npm start
+
+    This command will start the development server and open the app in your default web browser.
+
 
 ## Project Structure
 The project structure follows a component-based architecture:
