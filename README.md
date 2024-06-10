@@ -29,7 +29,7 @@ Before getting started, make sure you have the following prerequisites:
    ```bash
    npx create-react-app hooked
 
-   If create-react-app is not installed, you can install it globally:
+   #If create-react-app is not installed, you can install it globally:
   
   ```bash
   npm install -g create-react-app
