@@ -32,10 +32,10 @@ Before getting started, make sure you have the following prerequisites:
 ## Project Structure
 The project structure follows a component-based architecture:
 
-  - App.js: The main component serving as the parent for other components. It handles API requests and renders the UI.
-  - Header.js: Renders the application header with a customizable title.
-  - Movie.js: Renders individual movie items, including title, image, and year.
-  - Search.js: Provides a search form with input field and button, and handles user input and search functionality.
+  - **App.js:** The main component serving as the parent for other components. It handles API requests and renders the UI.
+  - **Header.js:** Renders the application header with a customizable title.
+  - **Movie.js:** Renders individual movie items, including title, image, and year.
+  - **Search.js:** Provides a search form with input field and button, and handles user input and search functionality.
 
 ## Conclusion
 Congratulations! You've now set up the Movie Search App using React Hooks. This project serves as a practical introduction to the capabilities of Hooks and demonstrates how they can simplify React development.
